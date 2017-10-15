@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Reruns</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Strings for load series dialog -->
+    <string name="load_series_dialog_button_save">Save</string>
+    <string name="load_series_dialog_button_cancel">Cancel</string>
+    <string name="load_series_dialog_prompt">Enter IMDB ID for series</string>
+
+    <!-- Warnings or errors -->
+    <string name="error_series_already_loaded">Cannot load a series that already exists.</string>
 </resources>

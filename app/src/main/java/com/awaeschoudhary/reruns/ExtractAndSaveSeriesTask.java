@@ -15,12 +15,13 @@ import org.jsoup.select.Elements;
  * Scrape IMDB for episodes and series information and save it in the database.
  */
 
-public class ExtractAndSaveSeriesUtility extends AsyncTask<String, Void, Void> {
+public class ExtractAndSaveSeriesTask extends AsyncTask<String, Void, Void> {
 
     private Context context;
     private ProgressDialog progressDialog;
 
-    public ExtractAndSaveSeriesUtility(Context context){
+
+    public ExtractAndSaveSeriesTask(Context context){
         this.context = context;
     }
 
@@ -86,10 +87,20 @@ public class ExtractAndSaveSeriesUtility extends AsyncTask<String, Void, Void> {
     }
 
     private void extractAndSaveEpisodesForSeason(Document document, String seriesImdbID, int seasonNumber){
+        //Used to determine if episode is not out yet, since unreleased episodes have this description
+        final String unreleasedEpisodeDescription = "Know what this is about? Be the first one to add a plot.";
+
         //episode info is contained within divs with the class "list_item"
         Elements episodeDivs = document.getElementsByClass("list_item");
 
         for(Element div : episodeDivs){
+            //Stop looking for more episodes there is one that is not out yet
+            String episodeDescription = div.getElementsByClass("item_description").get(0).text();
+
+            if(episodeDescription.trim().equalsIgnoreCase(unreleasedEpisodeDescription)){
+                break;
+            }
+
             Episode episode = new Episode();
 
             episode.setSeriesImdbID(seriesImdbID);
@@ -103,7 +114,7 @@ public class ExtractAndSaveSeriesUtility extends AsyncTask<String, Void, Void> {
             episode.setTitle(div.getElementsByTag("a").get(0).attr("title"));
 
             //div with class item_description will have episode description
-            episode.setDescription(div.getElementsByClass("item_description").get(0).text());
+            episode.setDescription(episodeDescription);
 
             //save series to db
             DbHandler.getInstance(context).createEpisode(episode);

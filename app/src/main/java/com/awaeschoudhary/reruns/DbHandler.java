@@ -29,7 +29,7 @@ public class DbHandler extends SQLiteOpenHelper{
     //episodes table info
     private static final String TABLE_EPISODES = "Episodes";
     private static final String KEY_EPISODE_ID = "ID";
-    private static final String KEY_EPISODE_SERIES_IMDB_ID = "SeriesID";
+    private static final String KEY_EPISODE_SERIES_IMDB_ID = "SeriesImdbID";
     private static final String KEY_EPISODE_SEASON_NUMBER = "SeasonNumber";
     private static final String KEY_EPISODE_NUMBER_IN_SEASON = "NumberInSeason";
     private static final String KEY_EPISODE_TITLE = "Title";
@@ -56,8 +56,8 @@ public class DbHandler extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE_SERIES = "CREATE TABLE " + TABLE_SERIES + "("
-                + KEY_SERIES_ID + " INTEGER PRIMARY KEY," + KEY_SERIES_TITLE + " TEXT,"
-                + KEY_SERIES_NUMBER_OF_SEASONS + " INTEGER)";
+                + KEY_SERIES_ID + " INTEGER PRIMARY KEY," + KEY_SERIES_IMDB_ID + " TEXT,"
+                + KEY_SERIES_TITLE + " TEXT," + KEY_SERIES_NUMBER_OF_SEASONS + " INTEGER)";
 
         String CREATE_TABLE_EPISODES = "CREATE TABLE " + TABLE_EPISODES + "("
                 + KEY_EPISODE_ID + " INTEGER PRIMARY KEY," + KEY_EPISODE_SERIES_IMDB_ID + " TEXT,"
@@ -104,6 +104,37 @@ public class DbHandler extends SQLiteOpenHelper{
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // loop through all rows and add to list
+        if (cursor.moveToFirst()) {
+            do {
+                Series s = new Series();
+
+                s.setID(Integer.parseInt(cursor.getString(0)));
+                s.setImdbID(cursor.getString(1));
+                s.setTitle(cursor.getString(2));
+                s.setNumberOfSeasons(Integer.parseInt(cursor.getString(3)));
+
+                series.add(s);
+
+            } while (cursor.moveToNext());
+        }
+
+        //close the cursor
+        cursor.close();
+
+        // return book list
+        return series;
+    }
+
+    public ArrayList<Series> getSeriesByImdbId(String imdbId){
+        ArrayList<Series> series = new ArrayList<Series>();
+
+        String query = "SELECT  * FROM " + TABLE_SERIES + " where " +
+                KEY_SERIES_IMDB_ID + " = '" + imdbId + "'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
 
         // loop through all rows and add to list
         if (cursor.moveToFirst()) {
