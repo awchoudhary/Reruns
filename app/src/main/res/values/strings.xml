@@ -7,6 +7,9 @@
     <string name="load_series_dialog_button_cancel">Cancel</string>
     <string name="load_series_dialog_prompt">Enter IMDB ID for series</string>
 
+    <!-- Labels -->
+    <string name="label_get_episode_button">Generate</string>
+
     <!-- Warnings or errors -->
     <string name="error_series_already_loaded">Cannot load a series that already exists.</string>
 </resources>
