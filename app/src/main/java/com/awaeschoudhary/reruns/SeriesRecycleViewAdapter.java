@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yahoo.mobile.client.android.util.rangeseekbar.RangeSeekBar;
 
@@ -46,16 +47,21 @@ public class SeriesRecycleViewAdapter
 
     @Override
     public void onBindViewHolder(SeriesViewHolder seriesViewHolder, int position) {
-        Series series = seriesList.get(position);
+        final Series series = seriesList.get(position);
 
         seriesViewHolder.seriesNameTextView.setText(series.getTitle());
 
-        seriesViewHolder.seekBar.setRangeValues(1, series.getNumberOfSeasons());
+        final RangeSeekBar seekBar = seriesViewHolder.seekBar;
+
+        seekBar.setRangeValues(1, series.getNumberOfSeasons());
 
         seriesViewHolder.getEpisodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Episode e = GenerateEpisodeUtility.generateEpisode(series.getImdbID(), seekBar.getSelectedMinValue().intValue(),
+                        seekBar.getSelectedMaxValue().intValue(), context);
 
+                Toast.makeText(context, e.getSeasonNumber() + " " + e.getTitle(), Toast.LENGTH_SHORT).show();
             }
         });
     }

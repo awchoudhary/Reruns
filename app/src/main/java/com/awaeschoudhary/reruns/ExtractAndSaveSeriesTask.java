@@ -57,6 +57,9 @@ public class ExtractAndSaveSeriesTask extends AsyncTask<String, Void, Void> {
         //season to be extracted
         int seasonCount = 100;
 
+        //number of season that have at least one released episode
+        int validSeasonCount = 0;
+
         while(seasonCount > 0){
             Document document = Jsoup.connect("http://www.imdb.com/title/" + imdbID + "/episodes?season=" + seasonCount).get();
 
@@ -67,8 +70,6 @@ public class ExtractAndSaveSeriesTask extends AsyncTask<String, Void, Void> {
                         .getElementsByAttributeValue("selected", "selected").get(0).attr("value");
 
                 seasonCount = Integer.parseInt(selectedSeason);
-
-                series.setNumberOfSeasons(seasonCount);
             }
 
             if(series.getTitle() == null || series.getTitle().equals("")){
@@ -77,16 +78,24 @@ public class ExtractAndSaveSeriesTask extends AsyncTask<String, Void, Void> {
                 series.setTitle(seriesTitle);
             }
 
-            extractAndSaveEpisodesForSeason(document, imdbID, seasonCount);
+            if(extractAndSaveEpisodesForSeason(document, imdbID, seasonCount)){
+                validSeasonCount++;
+            }
 
             seasonCount--;
         }
+
+        series.setNumberOfSeasons(validSeasonCount);
 
         //save series to db
         DbHandler.getInstance(context).createSeries(series);
     }
 
-    private void extractAndSaveEpisodesForSeason(Document document, String seriesImdbID, int seasonNumber){
+    //extract and save released episodes for a season and return true if the season has at least
+    //one released episode
+    private boolean extractAndSaveEpisodesForSeason(Document document, String seriesImdbID, int seasonNumber){
+        boolean isSeasonValid = false;
+
         //Used to determine if episode is not out yet, since unreleased episodes have this description
         final String unreleasedEpisodeDescription = "Know what this is about? Be the first one to add a plot.";
 
@@ -100,6 +109,9 @@ public class ExtractAndSaveSeriesTask extends AsyncTask<String, Void, Void> {
             if(episodeDescription.trim().equalsIgnoreCase(unreleasedEpisodeDescription)){
                 break;
             }
+
+            //set to true since there is one episodes in the season that is released.
+            isSeasonValid = true;
 
             Episode episode = new Episode();
 
@@ -119,5 +131,7 @@ public class ExtractAndSaveSeriesTask extends AsyncTask<String, Void, Void> {
             //save series to db
             DbHandler.getInstance(context).createEpisode(episode);
         }
+
+        return isSeasonValid;
     }
 }

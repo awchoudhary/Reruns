@@ -226,6 +226,39 @@ public class DbHandler extends SQLiteOpenHelper{
         return episodes;
     }
 
+    public ArrayList<Episode> getEpisodesBetweenSeasons(String seriesId, int minSeason, int maxSeason){
+        ArrayList<Episode> episodes = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_EPISODES + " WHERE " + KEY_EPISODE_SERIES_IMDB_ID + " = '" + seriesId +
+                "' AND " + KEY_EPISODE_SEASON_NUMBER + " BETWEEN " + minSeason + " AND " + maxSeason;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // loop through all rows and add to list
+        if (cursor.moveToFirst()) {
+            do {
+                //populate new note object with row values
+                Episode e = new Episode();
+                e.setID(Integer.parseInt(cursor.getString(0)));
+                e.setSeriesImdbID(cursor.getString(1));
+                e.setSeasonNumber(Integer.parseInt(cursor.getString(2)));
+                e.setNumberInSeason(Integer.parseInt(cursor.getString(3)));
+                e.setTitle(cursor.getString(4));
+                e.setDescription(cursor.getString(5));
+                e.setWeightage(Integer.parseInt(cursor.getString(6)));
+
+                episodes.add(e);
+            } while (cursor.moveToNext());
+        }
+
+        //close the cursor
+        cursor.close();
+
+        // return book list
+        return episodes;
+    }
+
     //delete episodes for a given series ID
     public void deleteEpisodes(int seriesID) {
         SQLiteDatabase db = this.getWritableDatabase();
