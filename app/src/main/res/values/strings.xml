@@ -7,9 +7,16 @@
     <string name="load_series_dialog_button_cancel">Cancel</string>
     <string name="load_series_dialog_prompt">Enter IMDB ID for series</string>
 
+    <!-- Strings for episode details dialog -->
+    <string name="episode_detail_dialog_button_ok">OK</string>
+
     <!-- Labels -->
-    <string name="label_get_episode_button">Generate</string>
+    <string name="label_get_episode_button">Get Episode</string>
 
     <!-- Warnings or errors -->
     <string name="error_series_already_loaded">Cannot load a series that already exists.</string>
+
+    <!-- Needed to not show "Min" and "Max" text on the seasons range selector -->
+    <string name="demo_min_label"></string>
+    <string name="demo_max_label"></string>
 </resources>

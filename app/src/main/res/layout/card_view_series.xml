@@ -5,7 +5,7 @@
     android:id="@+id/card_view_series"
     app:cardUseCompatPadding="true"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardBackgroundColor="@color/gray"
+    app:cardBackgroundColor="@android:color/transparent"
     style="@style/CardView"
     >
 
@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="16dp"
         >
 
         <TextView

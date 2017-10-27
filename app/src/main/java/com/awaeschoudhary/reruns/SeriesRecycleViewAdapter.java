@@ -1,6 +1,10 @@
 package com.awaeschoudhary.reruns;
 
 import android.content.Context;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.AppCompatButton;
@@ -61,9 +65,12 @@ public class SeriesRecycleViewAdapter
                 Episode e = GenerateEpisodeUtility.generateEpisode(series.getImdbID(), seekBar.getSelectedMinValue().intValue(),
                         seekBar.getSelectedMaxValue().intValue(), context);
 
-                Toast.makeText(context, e.getSeasonNumber() + " " + e.getTitle(), Toast.LENGTH_SHORT).show();
+                FragmentTransaction ft = ((FragmentActivity)context).getSupportFragmentManager().beginTransaction();
+                DialogFragment newFragment = EpisodeDescriptionDialogFragment.newInstance(e);
+                newFragment.show(ft, "dialog");
             }
         });
+
     }
 
     @Override

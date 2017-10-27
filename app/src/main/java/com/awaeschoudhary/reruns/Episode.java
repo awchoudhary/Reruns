@@ -1,10 +1,12 @@
 package com.awaeschoudhary.reruns;
 
+import java.io.Serializable;
+
 /**
  * Created by awaeschoudhary on 10/9/17.
  */
 
-public class Episode {
+public class Episode implements Serializable{
     private int ID;
     private String seriesImdbID;
     private int seasonNumber;

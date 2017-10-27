@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="midnightBlue">#23237f</color>
-    <color name="darkMidnightBlue">#0f0f66</color>
-    <color name="mint">#8cf382</color>
-    <color name="gray">#a9a9a9</color>
+    <color name="primaryOrange">#ff8a65</color>
+    <color name="darkOrange">#c75b39</color>
+    <color name="lightOrange">#ffbb93</color>
 </resources>
