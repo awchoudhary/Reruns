@@ -72,6 +72,7 @@ public class LoadSeriesDialogFragment extends DialogFragment{
         }
 
         ExtractAndSaveSeriesTask task = new ExtractAndSaveSeriesTask(getContext());
+
         task.execute(idInputString);
     }
 }

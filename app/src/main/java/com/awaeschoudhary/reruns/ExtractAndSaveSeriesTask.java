@@ -2,6 +2,7 @@ package com.awaeschoudhary.reruns;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -48,6 +49,9 @@ public class ExtractAndSaveSeriesTask extends AsyncTask<String, Void, Void> {
     protected void onPostExecute(Void v) {
         //hide dialog
         progressDialog.dismiss();
+
+        Intent intent = new Intent(context, context.getClass());
+        context.startActivity(intent);
     }
 
     private void extractAndSaveSeries(String imdbID) throws Exception {
