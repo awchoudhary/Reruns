@@ -121,7 +121,9 @@ public class ExtractAndSaveSeriesTask extends AsyncTask<String, Void, Void> {
 
             episode.setSeriesImdbID(seriesImdbID);
             episode.setSeasonNumber(seasonNumber);
-            episode.setWeightage(100);
+
+            //unencountered episodes should have high weightage
+            episode.setWeightage(1000);
 
             //first meta tag in div will have episode number as value
             episode.setNumberInSeason(Integer.parseInt(div.getElementsByTag("meta").get(0).attr("content")));

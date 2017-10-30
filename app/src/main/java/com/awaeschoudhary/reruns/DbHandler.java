@@ -270,4 +270,14 @@ public class DbHandler extends SQLiteOpenHelper{
         db.close();
     }
 
+    public void updateEpisodeWeightage(int id, int weightage){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "UPDATE " + TABLE_EPISODES + " SET " + KEY_EPISODE_WEIGHTAGE +
+                " = " + weightage + " WHERE " + KEY_EPISODE_ID + " = " + id;
+
+        //delete series
+        db.execSQL(query);
+    }
+
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,9 @@ public class EpisodeDescriptionDialogFragment extends DialogFragment{
 
     @BindView(R.id.textview_episode_description)
     TextView episodeDescriptionView;
+
+    @BindView(R.id.rating_bar_episode)
+    RatingBar ratingBar;
 
 
     //codes for bundle args
@@ -74,7 +78,12 @@ public class EpisodeDescriptionDialogFragment extends DialogFragment{
                 // Add action buttons
                 .setPositiveButton(okButtonText, new DialogInterface.OnClickListener() {
                     public void onClick (DialogInterface dialog,int id){
-                        dismiss();
+                        int rating = (int)ratingBar.getRating() * 10;
+
+                        //weightage can't be zero
+                        if(rating > 0){
+                            DbHandler.getInstance(getContext()).updateEpisodeWeightage(episode.getID(), rating);
+                        }
                     }
                 });
 
